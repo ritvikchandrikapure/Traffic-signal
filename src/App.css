@@ -1,0 +1,193 @@
+:root{
+  --bg:#e6ecf0;--ink:#14202e;--mute:#5d6d7e;--line:#d5dde4;--panel:#f9fbfc;
+  --ground:#d6e2cf;--road:#38414f;--walk:#c8d1c6;--mark:#f7f6ee;
+  --red:#d92f33;--amber:#e09a00;--green:#14914f;
+  --r2:#ff5a5d;--a2:#ffc233;--g2:#3ddc84;
+}
+*{box-sizing:border-box}
+html,body,#root{height:100%}
+body{margin:0;overflow:hidden;background:var(--bg);color:var(--ink);font-family:'Bricolage Grotesque',system-ui,sans-serif}
+button{font:inherit;color:inherit;cursor:pointer}
+.app{height:100dvh;display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:20px;padding:18px}
+
+/* ---------- stage ---------- */
+.stageBox{position:relative;min-width:0;min-height:0}
+.frame{position:absolute;left:50%;top:50%;translate:-50% -50%;border-radius:28px;overflow:hidden;
+  box-shadow:0 0 0 8px #fff,0 26px 60px #14202e30}
+.stage{position:relative;width:600px;height:600px;transform-origin:0 0;overflow:hidden;background:var(--ground)}
+.bld{position:absolute;border-radius:10px;box-shadow:inset 0 0 0 7px #ffffff55,5px 7px 0 #14202e1a}
+.tree{position:absolute;border-radius:50%;background:radial-gradient(circle at 35% 30%,#86c27f,#3d8750);box-shadow:3px 5px 0 #14202e22}
+.walk{position:absolute;background:var(--walk)}
+.wv1{left:206px;top:0;width:14px;height:100%}.wv2{left:380px;top:0;width:14px;height:100%}
+.wh1{top:206px;left:0;height:14px;width:100%}.wh2{top:380px;left:0;height:14px;width:100%}
+.road{position:absolute;background:var(--road)}
+.road.v{left:220px;top:0;width:160px;height:100%}
+.road.h{top:220px;left:0;height:160px;width:100%}
+.road::before{content:'';position:absolute}
+.road.v::before{left:78px;top:0;width:4px;height:100%;background:repeating-linear-gradient(var(--mark) 0 18px,transparent 18px 36px)}
+.road.h::before{top:78px;left:0;height:4px;width:100%;background:repeating-linear-gradient(90deg,var(--mark) 0 18px,transparent 18px 36px)}
+.core{position:absolute;left:220px;top:220px;width:160px;height:160px;background:var(--road)}
+.zebra{position:absolute;opacity:.85}
+.zt,.zb{left:220px;width:160px;height:16px;background:repeating-linear-gradient(90deg,var(--mark) 0 9px,transparent 9px 18px)}
+.zt{top:198px}.zb{top:386px}
+.zl,.zr{top:220px;height:160px;width:16px;background:repeating-linear-gradient(var(--mark) 0 9px,transparent 9px 18px)}
+.zl{left:198px}.zr{left:386px}
+.stop{position:absolute;background:var(--mark)}
+.st-N{left:300px;top:218px;width:80px;height:4px}
+.st-S{left:220px;top:378px;width:80px;height:4px}
+.st-W{left:218px;top:220px;width:4px;height:80px}
+.st-E{left:378px;top:300px;width:4px;height:80px}
+
+/* cars */
+.car{position:absolute;left:0;top:0;width:24px;height:40px;border-radius:8px;will-change:transform;
+  background:linear-gradient(90deg,#fff4,transparent 45%,#0003),var(--c);box-shadow:0 3px 7px #0006}
+.car::before{content:'';position:absolute;left:3px;right:3px;top:9px;height:10px;border-radius:3px;background:#0f1a28d0}
+.car::after{content:'';position:absolute;left:2px;right:2px;bottom:0;height:4px;border-radius:0 0 7px 7px;background:#6b2020;transition:background .15s,box-shadow .15s}
+.car.brake::after{background:#ff3b3b;box-shadow:0 0 10px 3px #ff3b3b99}
+.hl{position:absolute;top:1px;width:5px;height:3px;border-radius:2px;background:#fff7c2;box-shadow:0 -5px 9px #fff7c2aa}
+.hl.l{left:3px}.hl.r{right:3px}
+.ind{position:absolute;top:2px;width:4px;height:4px;border-radius:50%}
+.ind.l{left:-2px}.ind.r{right:-2px}
+.car.tl .ind.l,.car.tr .ind.r{background:#ffb000;box-shadow:0 0 8px 3px #ffb000bb;animation:ind .5s steps(2) infinite}
+
+/* signal heads */
+.head{position:absolute;width:58px;padding:5px 0 6px;display:flex;flex-direction:column;align-items:center;gap:5px;
+  background:#1b2530;border:2px solid #0e151d;border-radius:14px;box-shadow:4px 6px 0 #14202e2a}
+.head small{font-size:11px;font-weight:800;color:#8fa0b3}
+.h-N{left:398px;top:50px}.h-W{left:144px;top:50px}.h-S{left:144px;top:410px}.h-E{left:398px;top:410px}
+.lamp{width:32px;height:32px;border-radius:50%;background:#2c3947;transition:background .25s,box-shadow .25s}
+.lamp.red.on{background:var(--r2);box-shadow:0 0 18px 4px #ff5a5d88}
+.lamp.yellow.on{background:var(--a2);box-shadow:0 0 18px 4px #ffc23388;animation:blink .6s steps(2) infinite}
+.lamp.green.on{background:var(--g2);box-shadow:0 0 18px 4px #3ddc8488}
+.count{font-size:17px;font-weight:800;font-variant-numeric:tabular-nums;animation:tick .3s ease-out}
+.count.red{color:var(--r2)}.count.yellow{color:var(--a2)}.count.green{color:var(--g2)}
+.flash{position:absolute;inset:0;border:6px solid var(--red);border-radius:28px;animation:blink 1s steps(2) infinite;pointer-events:none}
+
+/* ---------- side panel ---------- */
+.side{display:flex;flex-direction:column;min-height:0;overflow:hidden;background:var(--panel);
+  border-radius:28px;padding:20px 22px;box-shadow:0 0 0 1px var(--line)}
+.side>section{border-top:1px solid var(--line);padding:12px 0}
+header{padding-bottom:12px}
+h1{margin:0;font-size:24px;font-weight:800;letter-spacing:-.02em}
+header p{margin:4px 0 0;font-size:13px;color:var(--mute)}
+h3{margin:0 0 6px;font-size:14px}
+
+.now .who{font-size:15px;font-weight:600}
+.big{font-size:clamp(52px,10vh,86px);font-weight:800;line-height:1.05;font-variant-numeric:tabular-nums;animation:tick .3s ease-out}
+.bar{height:6px;border-radius:9px;background:var(--line);overflow:hidden}
+.bar div{height:100%;transition:width .2s linear}
+.now.green .big{color:var(--green)}.now.green .bar div{background:var(--green)}
+.now.yellow .big{color:var(--amber)}.now.yellow .bar div{background:var(--amber)}
+.now.red .big{color:var(--red)}.now.red .bar div{background:var(--red)}
+.order{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-top:10px}
+.order span{padding:5px 0;text-align:center;font-size:12px;font-weight:600;border-radius:7px;background:#e3e9ee;color:var(--mute);transition:background .3s,color .3s}
+.order .on{color:#fff}.order .on.green{background:var(--green)}.order .on.yellow{background:var(--amber)}
+.order .next{box-shadow:inset 0 0 0 2px var(--mute);color:var(--ink)}
+
+.notice{display:grid;grid-template-columns:12px 1fr auto;align-items:center;gap:10px;padding:6px 0;font-size:14px}
+.notice+.notice{border-top:1px dashed var(--line)}
+.notice em{font-style:normal;color:var(--mute);font-size:13px;font-variant-numeric:tabular-nums}
+.dot{width:12px;height:12px;border-radius:50%}
+.notice.green .dot{background:var(--green)}.notice.yellow .dot{background:var(--amber)}.notice.red .dot{background:var(--red)}
+.notice.green em{color:var(--green);font-weight:600}
+
+.slider{display:grid;grid-template-columns:52px 1fr 70px;align-items:center;gap:10px;font-size:13px;margin:5px 0}
+.slider em{font-style:normal;color:var(--mute);text-align:right}
+input[type=range]{width:100%;accent-color:var(--ink)}
+.hint{margin:6px 0 0;font-size:12px;color:var(--mute)}
+
+.controls{display:flex;flex-wrap:wrap;gap:6px}
+.controls button,.close{height:36px;padding:0 13px;border-radius:10px;border:1px solid var(--line);background:#fff;transition:transform .1s,background .2s}
+.controls button:hover{background:#eef3f6}.controls button:active{transform:scale(.95)}
+.seg{display:flex;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.seg button{border:0!important;border-radius:0!important;padding:0 11px!important}
+.act{background:var(--ink)!important;color:#fff}
+.danger{color:var(--red);border-color:#f0b9ba!important}
+.danger.act{background:var(--red)!important;color:#fff}
+.only-m{display:none}
+
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;text-align:center;margin-top:auto}
+.stats b{display:block;font-size:20px;font-variant-numeric:tabular-nums}
+.stats span{font-size:11px;color:var(--mute)}
+.safe b{color:var(--green)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+
+@keyframes ind{50%{opacity:0}}
+@keyframes blink{50%{opacity:.4}}
+@keyframes tick{from{transform:scale(1.18);opacity:.6}to{transform:scale(1);opacity:1}}
+@media (max-height:720px){.stats,.hint,header p{display:none}}
+@media (max-width:900px){
+  .app{grid-template-columns:1fr;grid-template-rows:minmax(0,1fr) auto;gap:10px;padding:10px}
+  .side{padding:10px 14px;border-radius:20px}
+  header{display:none}
+  .side>section{padding:8px 0}.side>section:first-of-type{border-top:0}
+  .big{font-size:44px}.stats,.order{display:none}
+  .notices{display:grid;grid-template-columns:1fr 1fr;column-gap:16px}
+  .notice+.notice{border-top:0}
+  .only-m{display:inline-flex;align-items:center}
+  .traffic{display:none}
+  .traffic.open{display:block;position:fixed;left:10px;right:10px;bottom:10px;z-index:5;background:#fff;
+    padding:16px;border-radius:20px;box-shadow:0 20px 60px #14202e55}
+  .close{margin-top:10px;width:100%}
+}
+@media (prefers-reduced-motion:reduce){.lamp.yellow.on,.count,.big,.flash,.car .ind{animation:none}}
+
+/* ---------- vehicle types ---------- */
+.v-bike{border-radius:7px}
+.v-bike::before{left:1px;right:1px;top:8px;height:10px;border-radius:50%;background:#1f2937}
+.v-bike::after{left:1px;right:1px;height:3px}
+.v-bike .hl.l{left:4px}.v-bike .hl.r{display:none}
+.v-auto{border-radius:10px 10px 6px 6px}
+.v-auto::before{left:2px;right:2px;top:10px;height:15px;border-radius:4px;background:#1c2630}
+.v-bus{border-radius:7px}
+.v-bus::before{top:3px;bottom:7px;left:3px;right:3px;height:auto;border-radius:4px;background:linear-gradient(#0f1a28d0 0 9px,#ffffff38 9px)}
+.v-bus .hl.l{left:4px}.v-bus .hl.r{right:4px}
+.v-truck{border-radius:6px}
+.v-truck::before{top:3px;bottom:5px;left:3px;right:3px;height:auto;border-radius:3px;background:linear-gradient(#0f1a28d0 0 7px,transparent 7px 20px,#dfe5ea 20px)}
+.v-amb{border-radius:8px;z-index:2;animation:siren .6s step-end infinite}
+.v-amb::before{top:8px;bottom:6px;left:3px;right:3px;height:auto;border-radius:3px;
+  background:linear-gradient(#0f1a28d0 0 8px,transparent 8px),
+    linear-gradient(#e5383b,#e5383b) 50% 62%/14px 4px no-repeat,
+    linear-gradient(#e5383b,#e5383b) 50% 62%/4px 14px no-repeat}
+.bc{position:absolute;top:19px;width:6px;height:6px;border-radius:50%}
+.bc.l{left:4px;background:#ff2d2d;box-shadow:0 0 8px 3px #ff2d2d;animation:bcl .5s step-end infinite}
+.bc.r{right:4px;background:#2d6bff;box-shadow:0 0 8px 3px #2d6bff;animation:bcr .5s step-end infinite}
+
+/* ---------- ambulance priority ---------- */
+.flash.amb{animation:flashAmb .6s step-end infinite}
+.ambBanner{position:absolute;left:50%;top:12px;translate:-50% 0;padding:6px 16px;border-radius:99px;white-space:nowrap;
+  font-weight:800;font-size:14px;color:#fff;box-shadow:0 6px 18px #0005;animation:bannerBg .6s step-end infinite}
+.flash,.ambBanner{z-index:9}
+.amb{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.amb h3{margin:0;flex:1 1 auto}
+.amb button{height:34px;padding:0 12px;border-radius:10px;border:1px solid var(--line);background:#fff}
+.amb .seg button{padding:0 13px;font-weight:600}
+.amb button:disabled{opacity:.4;cursor:default}
+.amb button.act{background:var(--ink);color:#fff}
+.big{height:clamp(50px,9.5vh,84px);display:flex;align-items:center}
+.big.txt{font-size:clamp(32px,6vh,50px)}
+
+@keyframes siren{0%{box-shadow:0 0 18px 7px #ff2d2dcc}50%{box-shadow:0 0 18px 7px #2d6bffcc}}
+@keyframes bcl{0%{opacity:1}50%{opacity:.15}}
+@keyframes bcr{0%{opacity:.15}50%{opacity:1}}
+@keyframes flashAmb{0%{border-color:#e5383b}50%{border-color:#2d6bff}}
+@keyframes bannerBg{0%{background:#d92f33}50%{background:#2457d6}}
+@media (max-height:800px){.order{display:none}}
+@media (max-width:900px){.big{height:48px;font-size:44px}.big.txt{font-size:30px}.order{display:none}}
+@media (prefers-reduced-motion:reduce){.v-amb,.bc,.flash.amb,.ambBanner{animation:none}}
+
+/* ---------- zebra crossing: vehicles stop behind it ---------- */
+.zt{top:202px}.zb{top:382px}.zl{left:202px}.zr{left:382px}
+.st-N{left:300px;top:194px;width:80px;height:4px}
+.st-S{left:220px;top:402px;width:80px;height:4px}
+.st-W{left:194px;top:220px;width:4px;height:80px}
+.st-E{left:402px;top:300px;width:4px;height:80px}
+.h-N,.h-W{top:30px}.h-S,.h-E{top:420px}
+
+/* ---------- bike with a visible rider ---------- */
+.v-bike{border-radius:0;box-shadow:none;filter:drop-shadow(0 2px 3px #0006);
+  background:radial-gradient(ellipse 7px 5px at 50% 46%,var(--c) 98%,transparent),
+    linear-gradient(#222b36,#222b36) 50% 22%/14px 2px no-repeat,
+    linear-gradient(#222b36,#222b36) 50% 50%/4px 100% no-repeat}
+.v-bike::before{left:3px;right:3px;top:9px;height:8px;border-radius:50%;background:#1f2937}
+.v-bike::after{left:5px;right:5px;height:3px}
